@@ -1,15 +1,16 @@
 'use strict';
 
 const express = require('express');
-const dataModules = require('../models');
-const basicAuth = require('../middleware/basic.js');
-const bearerAuth = require('../middleware/bearer.js');
-const permissions = require('../middleware/acl.js');
+const dataModules = require('../modelinstance/index.js');
+const basicAuth = require('../auth/middleware/basic.js');
+const bearerAuth = require('../auth/middleware/bearer.js');
+const permissions = require('../auth/middleware/acl.js');
 
 const router = express.Router();
 
 router.param('model', (req, res, next) => {
   const modelName = req.params.model;
+  console.log(modelName);
   if (dataModules[modelName]) {
     req.model = dataModules[modelName];
     next();
@@ -44,7 +45,7 @@ async function handleCreate(req, res) {
 async function handleUpdate(req, res) {
   const id = req.params.id;
   const obj = req.body;
-  let updatedRecord = await req.model.update(id, obj)
+  let updatedRecord = await req.model.update(id, obj);
   res.status(200).json(updatedRecord);
 }
 

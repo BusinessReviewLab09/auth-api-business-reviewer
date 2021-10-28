@@ -5,17 +5,17 @@ const bizModel = (sequelize, DataTypes) => sequelize.define('Business', {
       type: DataTypes.STRING, 
       allowNull: false 
     },
-    type: { 
+  type: { 
       type: DataTypes.ENUM('restaurant', 'bar', 'night club', 'coffee shop', 'deli'), 
       allowNull: false 
     },
   comment: { 
       type: DataTypes.STRING, 
-      allowNull: false 
+      allowNull: true 
     },
   stars: { 
     type: DataTypes.NUMBER, 
-    allowNull: false 
+    allowNull: true 
   }
 });
 
