@@ -4,7 +4,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const authRouter = require('./auth/routes.js');
+const userRoutes = require('./auth/routes.js');
 
 
 
@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-app.use(authRouter);
+app.use(userRoutes);
 
 
 module.exports = {

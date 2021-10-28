@@ -21,8 +21,8 @@ const userModel = (sequelize, DataTypes) => {
 
     role: { 
       type: DataTypes.ENUM('anonUser', 'authUser', 'bizOwner', 'admin'),
-    
-      required: true, defaultValue: 'anonUser'
+      required: true, 
+      defaultValue: 'anonUser'
     },
 
     token: {
