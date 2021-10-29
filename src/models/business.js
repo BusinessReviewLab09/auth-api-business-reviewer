@@ -6,17 +6,12 @@ const bizModel = (sequelize, DataTypes) => sequelize.define('Business', {
       allowNull: false 
     },
   type: { 
-      type: DataTypes.ENUM('restaurant', 'bar', 'night club', 'coffee shop', 'deli'), 
+      type: DataTypes.STRING, 
+      validate: {
+        isType(value) {if (!['restaurant', 'bar', 'night club', 'coffee shop', 'deli'].includes(value)) throw Error ('invalid business type')}
+      },
       allowNull: false 
     },
-  comment: { 
-      type: DataTypes.STRING, 
-      allowNull: true 
-    },
-  stars: { 
-    type: DataTypes.NUMBER, 
-    allowNull: true 
-  }
 });
 
 module.exports = bizModel;

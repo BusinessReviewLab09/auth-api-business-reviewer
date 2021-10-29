@@ -10,7 +10,6 @@ const router = express.Router();
 
 router.param('model', (req, res, next) => {
   const modelName = req.params.model;
-  console.log(modelName);
   if (dataModules[modelName]) {
     req.model = dataModules[modelName];
     next();
@@ -19,6 +18,26 @@ router.param('model', (req, res, next) => {
   }
 });
 
+async function handleComments(req) {
+  const id = req.params.id;
+
+  req.model = dataModules['comments'];
+
+  let comments = await req.model.get({where: {bizId: id}});
+
+  return comments;
+}
+
+async function handleStars(req) {
+  const id = req.params.id;
+
+  req.model = dataModules['stars'];
+
+  let comments = await req.model.get(id);
+
+  return comments;
+}
+
 router.get('/:model', basicAuth, handleGetAll);
 router.get('/:model/:id', handleGetOne);
 router.post('/:model', bearerAuth, permissions('create'), handleCreate);
@@ -26,20 +45,40 @@ router.put('/:model/:id', bearerAuth, permissions('update'), handleUpdate);
 router.delete('/:model/:id', bearerAuth, permissions('delete'), handleDelete);
 
 async function handleGetAll(req, res) {
-  let allRecords = await req.model.get();
-  res.status(200).json(allRecords);
+  try {
+    let allRecords = await req.model.get();
+    res.status(200).json(allRecords);
+  } catch (error) {console.log(error, '<-- get all error --<<'); res.status(400).send(error)}
 }
 
 async function handleGetOne(req, res) {
   const id = req.params.id;
-  let theRecord = await req.model.get(id)
-  res.status(200).json(theRecord);
+
+  let bizRecord = await req.model.get(id);
+
+  console.log(bizRecord, '<-- BIZ RECORD --<<')
+
+  let comments = null;
+  let stars = null;
+
+  if (bizRecord.type) {
+
+    comments = await handleComments(req);
+    stars = await handleStars(req);
+
+  };
+
+  res.status(200).json({bizRecord, comments, stars});
 }
 
 async function handleCreate(req, res) {
-  let obj = req.body;
-  let newRecord = await req.model.create(obj);
-  res.status(201).json(newRecord);
+  try {
+    let obj = req.body;
+    let newRecord = await req.model.create(obj);
+    res.status(201).json(newRecord);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 }
 
 async function handleUpdate(req, res) {

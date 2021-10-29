@@ -18,6 +18,12 @@ const businesses = bizModel(sequelize, DataTypes);
 const comments = commentModel(sequelize, DataTypes);
 const stars = starModel(sequelize, DataTypes);
 
+// businesses.hasMany(stars, { foreignKey: 'bizId', sourceKey: 'id'});
+// stars.belongsTo(businesses, { foreignKey: 'bizId', targetKey: 'id'});
+
+businesses.hasMany(comments, { foreignKey: 'bizId', sourceKey: 'id'});
+comments.belongsTo(businesses, { foreignKey: 'bizId', targetKey: 'id'});
+
 
 module.exports = {
     db: sequelize,
