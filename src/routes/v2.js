@@ -23,8 +23,7 @@ async function handleComments(req) {
 
   req.model = dataModules['comments'];
 
-  let comments = await req.model.get(id);
-
+  let comments = await req.model.get({where: {bizId: id}});
 
   return comments;
 }
@@ -35,7 +34,6 @@ async function handleStars(req) {
   req.model = dataModules['stars'];
 
   let comments = await req.model.get(id);
-
 
   return comments;
 }
@@ -55,7 +53,10 @@ async function handleGetAll(req, res) {
 
 async function handleGetOne(req, res) {
   const id = req.params.id;
+
   let bizRecord = await req.model.get(id);
+
+  console.log(bizRecord, '<-- BIZ RECORD --<<')
 
   let comments = null;
   let stars = null;
