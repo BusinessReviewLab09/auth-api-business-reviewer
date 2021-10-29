@@ -33,9 +33,9 @@ async function handleStars(req) {
 
   req.model = dataModules['stars'];
 
-  let comments = await req.model.get(id);
+  let stars = await req.model.get({where: {bizId: id}});
 
-  return comments;
+  return stars;
 }
 
 router.get('/:model', basicAuth, handleGetAll);
@@ -48,15 +48,13 @@ async function handleGetAll(req, res) {
   try {
     let allRecords = await req.model.get();
     res.status(200).json(allRecords);
-  } catch (error) {console.log(error, '<-- get all error --<<'); res.status(400).send(error)}
+  } catch (error) {res.status(400).send(error)}
 }
 
 async function handleGetOne(req, res) {
   const id = req.params.id;
 
   let bizRecord = await req.model.get(id);
-
-  console.log(bizRecord, '<-- BIZ RECORD --<<')
 
   let comments = null;
   let stars = null;
@@ -90,8 +88,20 @@ async function handleUpdate(req, res) {
 
 async function handleDelete(req, res) {
   let id = req.params.id;
+
   let deletedRecord = await req.model.delete(id);
-  res.status(200).json(deletedRecord);
+
+  let comments = null;
+  let stars = null;
+
+  if (deletedRecord.type) {
+
+    comments = await handleComments(req);
+    stars = await handleStars(req);
+
+  };
+
+  res.status(200).json({deletedRecord, comments, stars});
 }
 
 module.exports = router;
