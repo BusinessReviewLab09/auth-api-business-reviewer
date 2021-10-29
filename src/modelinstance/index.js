@@ -22,7 +22,7 @@ const stars = starModel(sequelize, DataTypes);
 module.exports = {
     db: sequelize,
     users: new Collection(users),
-    businesses: new Collection(businesses),
+    business: new Collection(businesses),
     comments: new Collection(comments),
     stars: new Collection(stars)
 }

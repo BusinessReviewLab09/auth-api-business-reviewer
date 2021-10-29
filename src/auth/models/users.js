@@ -3,7 +3,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const SECRET = process.env.SECRET || 'secretstring';
+const SECRET = process.env.SECRET;
 
 const userModel = (sequelize, DataTypes) => {
   const model = sequelize.define('Users', {
@@ -21,8 +21,8 @@ const userModel = (sequelize, DataTypes) => {
 
     role: { 
       type: DataTypes.ENUM('anonUser', 'authUser', 'bizOwner', 'admin'),
-    
-      required: true, defaultValue: 'anonUser'
+      required: true, 
+      defaultValue: 'anonUser'
     },
 
     token: {
@@ -56,6 +56,7 @@ const userModel = (sequelize, DataTypes) => {
   });
 
   model.authenticateBasic = async function (username, password) {
+
     const user = await this.findOne({ where: { username } });
     const valid = await bcrypt.compare(password, user.password);
     if (valid) { return user; }

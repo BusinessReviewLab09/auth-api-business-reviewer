@@ -5,14 +5,18 @@ const bizModel = (sequelize, DataTypes) => sequelize.define('Business', {
       type: DataTypes.STRING, 
       allowNull: false 
     },
-  calories: { 
-      type: DataTypes.NUMBER, 
-      allowNull: false 
-    },
   type: { 
       type: DataTypes.ENUM('restaurant', 'bar', 'night club', 'coffee shop', 'deli'), 
-      required: true 
-    }
+      allowNull: false 
+    },
+  comment: { 
+      type: DataTypes.STRING, 
+      allowNull: true 
+    },
+  stars: { 
+    type: DataTypes.NUMBER, 
+    allowNull: true 
+  }
 });
 
 module.exports = bizModel;
